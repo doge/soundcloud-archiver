@@ -33,7 +33,7 @@ class Database:
             'duration': song_data['duration'],
             'upload-date': song_data['display_date'],
             'artist-url': song_data['user']['permalink_url'],
-            'archive_date': current_date
+            'archive-date': current_date
         })
 
     def insert_set(self, song_data):
@@ -48,5 +48,5 @@ class Database:
             'artwork-url': song_data['artwork_url'],
             'upload-date': song_data['display_date'],
             'artist-url': song_data['user']['permalink_url'],
-            'archive_date': current_date
+            'archive-date': current_date
         })
