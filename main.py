@@ -38,6 +38,10 @@ def send_embed(song_data):
 
     embed.add_embed_field(name="Artist", value=song_data['user']['username'], inline=False)
     embed.add_embed_field(name="URL", value=str(song_data['permalink_url']), inline=False)
+
+    embed.add_embed_field(name="Duration (ms)", value=song_data['duration'], inline=True)
+    embed.add_embed_field(name="Upload Date", value=song_data['display_date'], inline=True)
+   
     embed.set_image(url=song_data['artwork_url'].replace('-large', '-t500x500'))
     webhook.add_embed(embed)
 
