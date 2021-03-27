@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div>
+        <div class="table-responsive">
+          <table class="table">
+            <caption>Songs Archived</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Artist</th>
+                  <th scope="col">Archive Date</th>
+                  <th scope="col">Download</th>
+                </tr>
+              </thead>
+
+              <tbody>
+              {% for song in songs %}
+                <tr>
+                  <td><a href="/info?id={{ song['_id'] }}">{{song['title']}}</a></td>
+                  <td>{{ song['artist'] }}</td>
+                  <td>{{ song['archive-date'] }}</td>
+                  <td>
+                    <a href="/download?id={{ song['_id'] }}" class="btn btn-block btn-primary btn-success">
+                      <span class="glyphicon glyphicon-cloud-download">Download</span>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+    </div>
+
+{% endblock %}

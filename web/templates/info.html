@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<body>
+<h1>{{ song['title'] }}</h1>
+<h3>{{ song['artist'] }}</h3>
+<h6>archived on: {{ song['archive-date'] }}</h6>
+<body>
+    <br>
+    <h3>description</h3>
+    <p>{{ song['description'] }}</p>
+
+    <br>
+    <h3>other info</h3>
+    <p>url: <a href="{{ song['url'] }}">{{ song['url'] }}</a></p>
+    <p>duration (ms): {{ song['duration'] }}</p>
+    <p>upload date: {{ song['upload-date'] }}</p>
+
+    <img src="{{ song['artwork-url'] }}">
+
+    <audio controls>
+      <source src="/download?id={{song['_id']}}" type="audio/mp3">
+      Your browser does not support the audio tag.
+    </audio>
+</body>
+</body>
+
+{% endblock %}

@@ -9,5 +9,5 @@ monitors a users recent soundcloud likes, downloads the songs and stores metadat
  
 - [ ] web panel (flask)
    - [ ] login system
-   - [ ] dashboard
+   - [x] dashboard
    - [ ] mailer system
