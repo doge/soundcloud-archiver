@@ -1,12 +1,16 @@
 from pymongo import MongoClient
+from config import Config
 import datetime
 
 
 class Database:
     def __init__(self, credentials):
-        #self.client = MongoClient('mongodb://%s:%s@%s:%s' % (credentials['user'], credentials['password'],
-        #                                                     credentials['ip'], credentials['port']))
-        self.client = MongoClient(credentials['ip'], credentials['port'])
+        if Config.production:
+            self.client = MongoClient('mongodb://%s:%s@%s:%s' % (credentials['user'], credentials['password'],
+                                                                 credentials['ip'], credentials['port']))
+        else:
+            self.client = MongoClient(credentials['ip'], credentials['port'])
+
         self.db = self.client[credentials['db_name']]
         self.collection = self.db[credentials['collection']]
 
@@ -33,7 +37,7 @@ class Database:
             'duration': song_data['duration'],
             'upload-date': song_data['display_date'],
             'artist-url': song_data['user']['permalink_url'],
-            'archive-date': current_date
+            'archive_date': current_date
         })
 
     def insert_set(self, song_data):

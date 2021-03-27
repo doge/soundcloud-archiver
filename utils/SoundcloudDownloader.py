@@ -1,7 +1,7 @@
 import re
 import eyed3
 import requests
-import exceptions
+from utils import exceptions
 from pathlib import Path
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -148,7 +148,7 @@ class SoundcloudDownloader:
         ''' downloads, saves, and tags a single song '''
 
         # create the songs directory if it doesn't already exist
-        Path("./songs").mkdir(parents=True, exist_ok=True)
+        Path("../songs").mkdir(parents=True, exist_ok=True)
 
         print("[~] \"%s\" downloading..." % self.data[0]['title'])
 
@@ -167,7 +167,7 @@ class SoundcloudDownloader:
     def download_set(self):
         ''' downloads, saves, and tags a set '''
 
-        path = "./songs/"
+        path = "../songs/"
 
         # create the songs directory if it doesn't already exist
         Path(path).mkdir(parents=True, exist_ok=True)
