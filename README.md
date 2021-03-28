@@ -1,5 +1,5 @@
-# soundcloud-like-archiver
-monitors a users recent soundcloud likes, downloads the songs and stores metadata into a mongodb
+# soundcloud-archiver
+have a backup of the music you love, forever.
 
 ## todo
 - [x] daemon process
