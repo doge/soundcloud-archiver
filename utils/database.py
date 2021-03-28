@@ -40,7 +40,6 @@ class Database:
 
         return data
 
-
     def insert_song(self, song_data):
         date = datetime.datetime.now()
         current_date = date.strftime("%Y-%m-%d %H:%M")
@@ -50,7 +49,14 @@ class Database:
             # then it's more accurate than using the song uploaders username
             artist_name = song_data['publisher_metadata']['artist']
         except:
-            artist_name = song_data['username']
+            artist_name = song_data['user']['username']
+
+        try:
+            # some songs don't have artwork so we will just use their soundcloud
+            # profile picture just how the website does
+            artwork_url = song_data['artwork_url'].replace('-large', '-t500x500')
+        except:
+            artwork_url = song_data['user']['avatar_url'].replace('-large', '-t500x500')
 
         return self.collection.insert_one({
             'artist': artist_name,
@@ -58,7 +64,7 @@ class Database:
             'description': song_data['description'],
             'metadata': song_data['publisher_metadata'],
             'url': song_data['permalink_url'],
-            'artwork-url': song_data['artwork_url'].replace('-large', '-t500x500'),
+            'artwork-url': artwork_url,
             'duration': song_data['duration'],
             'upload-date': song_data['display_date'],
             'artist-url': song_data['user']['permalink_url'],

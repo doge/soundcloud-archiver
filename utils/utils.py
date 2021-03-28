@@ -36,7 +36,7 @@ def send_embed(song_data):
         # then it's more accurate than using the song uploaders username
         artist_name = song_data['publisher_metadata']['artist']
     except:
-        artist_name = song_data['username']
+        artist_name = song_data['user']['username']
 
     embed.add_embed_field(name="Artist", value=artist_name, inline=False)
     embed.add_embed_field(name="URL", value=str(song_data['permalink_url']), inline=False)
@@ -44,10 +44,15 @@ def send_embed(song_data):
     embed.add_embed_field(name="Duration (ms)", value=song_data['duration'], inline=True)
     embed.add_embed_field(name="Upload Date", value=song_data['display_date'], inline=True)
 
-    embed.set_image(url=song_data['artwork_url'].replace('-large', '-t500x500'))
+    try:
+        # some songs don't have artwork so we will just use their soundcloud
+        # profile picture just how the website does
+        embed.set_image(url=song_data['artwork_url'].replace('-large', '-t500x500'))
+    except:
+        embed.set_image(url=song_data['user']['avatar_url'].replace('-large', '-t500x500'))
 
     webhook.add_embed(embed)
-    print(json.dumps(song_data, indent=4))
+
     webhook.username = song_data['user']['username']
     webhook.avatar_url = song_data['user']['avatar_url'].replace('-large', '-t500x500')
 
