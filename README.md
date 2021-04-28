@@ -7,7 +7,14 @@ have a backup of the music you love, forever.
    - [x] discord webhook integration
    - [x] store data in mongodb
  
-- [ ] web panel (flask)
-   - [ ] login system
+- [x] web panel (flask)
+   - [x] setup
+   - [x] login system
    - [x] dashboard
-   - [ ] mailer system
+
+## known issues
+- [ ] sets aren't archiving properly and may cause the daemon to crash
+
+## screenshots
+![panel](https://i.imgur.com/IAe0aFA.png)
+![info view](https://i.imgur.com/FfN7rAb.png)

@@ -1,16 +1,118 @@
 {% extends 'base.html' %}
 {% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" style="padding-left: 25px" href="/">soundcloud-archiver</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link disabled" href="#">Panel</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/archive">Download Archive</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+
+    </nav>
+
+    <div style="padding-left:25px;padding-right:25px;padding-top:10px;">
+
+        <style>
+            .card-img-top {
+                width: 100%;
+                height: 10vw;
+                object-fit: cover;
+            }
+
+            .card-text {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* number of lines to show */
+                -webkit-box-orient: vertical;
+            }
+            .card-title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1; /* number of lines to show */
+                -webkit-box-orient: vertical;
+            }
+
+        </style>
+        <div class="row flex-row flex-nowrap d-flex align-items-stretch">
+            {% for song in recent_songs %}
+                <div class="col-3">
+
+                        <div class="card h-100 shadow-sm">
+                            <a href="/info?id={{ song['_id'] }}">
+                            <img class="card-img-top" src="{{ song['artwork-url'] }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ song.title }}</h5>
+                            </a>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ song.artist }}</h6>
+                                <p class="card-text">
+                                    {{ song.description }}
+                                </p>
+                          </div>
+                        </div>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <br>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                    <div role="alert"
+                         aria-live="assertive"
+                         aria-atomic="true"
+                         class="toast"
+                         data-autohide="true"
+                         data-delay="5000"
+                         style="position: absolute; top: 10; right: 10;">
+                      <div class="toast-header">
+                        <strong class="mr-auto">Alert</strong>
+                      </div>
+                      <div class="toast-body">
+                          {{ message }}
+                      </div>
+                    </div>
+
+                    <script>
+                        $('.toast').toast('show');
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+    <div class="container-fluid shadow-lg" style="width:100%;">
         <div class="table-responsive">
-          <table class="table">
-            <caption>Songs Archived</caption>
+          <table
+                  data-toggle="table"
+                  class="table"
+                  data-search="true"
+                  data-search-align="left"
+                  data-pagination="true"
+                  data-sort-name="archive-date"
+                  data-sort-order="desc"
+                  data-height="632">
               <thead>
                 <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Artist</th>
-                  <th scope="col">Archive Date</th>
-                  <th scope="col">Download</th>
+                  <th data-sortable="true">Title</th>
+                  <th data-sortable="true">Artist</th>
+                  <th data-field="archive-date" data-sortable="true">Archive Date</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
 
@@ -18,11 +120,14 @@
               {% for song in songs %}
                 <tr>
                   <td><a href="/info?id={{ song['_id'] }}">{{song['title']}}</a></td>
-                  <td>{{ song['artist'] }}</td>
+                  <td><a href="{{ song['artist-url'] }}">{{ song['artist'] }}</a></td>
                   <td>{{ song['archive-date'] }}</td>
                   <td>
                     <a href="/download?id={{ song['_id'] }}" class="btn btn-block btn-primary btn-success">
-                      <span class="glyphicon glyphicon-cloud-download">Download</span>
+                      <span class="bi bi-file-earmark-arrow-down-fill"></span>
+                    </a>
+                    <a href="/delete?id={{ song['_id'] }}" class="btn btn-block btn-primary btn-danger">
+                      <span class="bi bi-trash-fill"></span>
                     </a>
                   </td>
                 </tr>
@@ -30,6 +135,12 @@
               </tbody>
           </table>
         </div>
+        </div>
+      <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
+      <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+
     </div>
+
+    <div style="padding-top: 1rem;"></div>
 
 {% endblock %}

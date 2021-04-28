@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+        <div class="container" style="padding-top: 25px; width: 35%;">
+
+        <div class="box">
+            <h2 class="subtitle">Login</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="notification is-{{ category }} is-light">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="post" class="container">
+
+                    <div class="form-group row py-sm-1 mb-0">
+                        {{ login_form.csrf_token }}
+                        {{ login_form.username_login(size=20, class='form-control', placeholder='Username') }}
+                    </div>
+
+
+
+                    <div class="form-group row py-sm-1 mb-0">
+                        {{ login_form.password_login(size=20, class='form-control', placeholder='Password') }}
+                    </div>
+
+                    <div class="form-group row py-sm-1 mb-0">
+                    {{ login_form.button_login(size=20, class='btn btn-primary btn-block') }}
+                    </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

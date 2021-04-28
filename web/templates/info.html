@@ -1,28 +1,139 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+    hr {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      border: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
 
-<body>
-<h1>{{ song['title'] }}</h1>
-<h3>{{ song['artist'] }}</h3>
-<h6>archived on: {{ song['archive-date'] }}</h6>
-<body>
-    <br>
-    <h3>description</h3>
-    <p>{{ song['description'] }}</p>
+    img.blur {
+      -webkit-filter: blur(4px);
+      filter: blur(4px);
+      filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-    <br>
-    <h3>other info</h3>
-    <p>url: <a href="{{ song['url'] }}">{{ song['url'] }}</a></p>
-    <p>duration (ms): {{ song['duration'] }}</p>
-    <p>upload date: {{ song['upload-date'] }}</p>
+    .jumbotron {
+      position:relative;
+      overflow:hidden;
+            background:rgba(0,0,0,0.2);
+    }
 
-    <img src="{{ song['artwork-url'] }}">
+    .jumbotron .container {
+      position:relative;
+      z-index:2;
+    }
 
-    <audio controls>
-      <source src="/download?id={{song['_id']}}" type="audio/mp3">
-      Your browser does not support the audio tag.
-    </audio>
-</body>
-</body>
+    .jumbotron-background {
+      object-fit:cover;
+      position:absolute;
+      z-index:-1;
+      width:100%;
+      opacity:0.8;
+    }
+
+    .container-sm {
+        border-radius:5px;
+        padding:1rem;
+        margin-top:1rem;
+    }
+</style>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" style="padding-left: 25px" href="/">soundcloud-archiver</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/panel">Panel</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/archive">Download Archive</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+  </div>
+
+</nav>
+
+
+<div class="jumbotron bg-cover text-white blur">
+    <div class="jumbotron-background">
+    <img src="{{ song['artwork-url'] }}" class="blur ">
+    </div>
+    <div class="container py-5 text-center">
+        <h1 class="display-4 font-weight-bold">{{ song['title'] }}</h1>
+        <h4 class="">{{ song['artist'] }}</h4>
+        <p>archived on: {{ song['archive-date'] }}</p>
+    </div>
+</div>
+
+<div class="container-sm shadow-lg" style="">
+    <div id="waveform" style="margin-bottom: 1rem;margin-top:1rem;"></div>
+    <div class="controls">
+        <div class="row">
+            <div class="col">
+                <button style="width:100%;" class="btn btn-primary align-center btn-block" data-action="play" onclick="wavesurfer.playPause()">
+                    Play/Pause
+                </button>
+            </div>
+            <div class="col">
+                <a href="/download?id={{ song['_id'] }}">
+                    <button style="width:100%;" class="btn btn-success align-center btn-block">
+                        Download
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+
+    <script>
+        var wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'grey',
+        progressColor: '#007bff'
+    });
+
+    wavesurfer.load('/download?id={{song['_id']}}');
+    </script>
+</div>
+
+
+
+<div class="row" style="padding-top:10px;padding-left:7.55rem;padding-right:7.55rem;">
+    <div class="col-sm">
+        <div class="container-sm shadow-lg" style="margin-top: 2rem;">
+            <h3>info</h3>
+
+            <p>url: <a href="{{ song['url'] }}">{{ song['url'] }}</a></p>
+            <p>duration: {{ minutes }}:{{ seconds }}</p>
+            <p>upload date: {{ song['upload-date'] }}</p>
+        </div>
+        <div class="container-sm shadow-lg" style="margin-top: 2rem;">
+            <h3>description</h3>
+            <pre>{{ song['description'] }}</pre>
+        </div>
+
+    </div>
+    <div class="col-sm ">
+        <div class="container-sm shadow-lg" style="margin-top: 2rem;">
+            <img style="border-radius:5px;" src="{{ song['artwork-url'] }}">
+        </div>
+
+    </div>
+</div>
+
 
 {% endblock %}

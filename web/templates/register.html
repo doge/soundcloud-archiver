@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <script>
+        $(document).ready(function () {
+            $("#notification-button").click(function () {
+                $(this).parent('div').remove();
+            });
+        });
+    </script>
+
+            <div class="container" style="padding-top: 25px; width: 35%;">
+                        <div class="box">
+                            <h2 class="subtitle">Register</h2>
+
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        <div class="notification is-{{ category }} is-light">
+                                            <button class="delete" id="notification-button"></button>
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+
+                            <form method="post">
+                                <div class="form-group row py-sm-1 mb-0">
+                                        {{ register_form.csrf_token }}
+                                        {{ register_form.username_register(size=20, class='form-control', placeholder='Username') }}
+                                </div>
+
+                                <div class="form-group row py-sm-1 mb-0">
+                                        {{ register_form.email_register(size=20, class='form-control', placeholder='Email') }}
+                                </div>
+
+                                <div class="form-group row py-sm-1 mb-0">
+                                        {{ register_form.password_register(size=20, class='form-control', placeholder='Password') }}
+                                </div>
+
+                                <div class="form-group row py-sm-1 mb-0">
+                                        {{ register_form.button_register(size=20, class='btn btn-primary btn-block') }}
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+
+{% endblock %}
