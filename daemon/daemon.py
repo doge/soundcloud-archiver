@@ -1,10 +1,8 @@
 import time
 from config import Config
 from utils.SoundcloudDownloader import SoundcloudDownloader
-from utils.database import Database
 from utils.utils import get_recent_likes, send_embed
-
-database = Database(Config.database)
+from web.interfaces import Interfaces
 
 
 def start_daemon():
@@ -16,7 +14,7 @@ def start_daemon():
 
         # check if we have any of the songs in the database
         for like in likes:
-            item = database.find_one({'url': like})
+            item = Interfaces.song_database.find_one({'url': like})
             if item is None:
                 new_likes.append(like)
 
@@ -32,12 +30,11 @@ def start_daemon():
             if downloader.url_type == "set":
                 for item in downloader.data[0]:
                     send_embed(item)
-                    database.insert_song(item)
 
-                database.insert_set(downloader.data[1])
+                Interfaces.song_database.insert_set(downloader.data)
             else:
                 send_embed(downloader.data[0])
-                database.insert_song(downloader.data[0])
+                Interfaces.song_database.insert_song(downloader.data[0])
 
         print("[*] refreshing in %s seconds...\n" % Config.timeout_seconds)
 

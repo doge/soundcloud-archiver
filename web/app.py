@@ -2,13 +2,11 @@ from flask import Flask, redirect, render_template, request, send_file, jsonify,
 from interfaces import Interfaces
 import os
 import zipfile
-from datetime import datetime
-from utils.SoundcloudDownloader import remove_forbidden_chars
+import shutil
 from bson.objectid import InvalidId
 from auth.middleware import login_required
 from auth.controllers import auth
 from bson.objectid import ObjectId
-from json import dumps
 
 SONGS_DIR = os.path.normpath(os.getcwd() + os.sep + os.pardir) + "/songs/"
 
@@ -46,11 +44,14 @@ def create_app():
         songs_not_sets = []
         songs = Interfaces.song_database.find()
         for song in songs:
-            if 'set' not in song['url']:
+            try:
+                for song in song['songs']:
+                    songs_not_sets.append(song)
+            except:
                 songs_not_sets.append(song)
 
         # sort them by most recent archived date first
-        songs_not_sets = sorted(songs_not_sets, key=lambda s: s['archive-date'], reverse=True)
+        songs_not_sets = sorted(songs, key=lambda s: s['archive-date'], reverse=True)
 
         return render_template('panel.html', songs=songs_not_sets, recent_songs=songs_not_sets[:4])
 
@@ -63,44 +64,62 @@ def create_app():
             except InvalidId:
                 return jsonify({'error': 'invalid id'})
 
-            minutes, seconds = divmod(song['duration'] / 1000, 60)
+            try:
+                minutes, seconds = divmod(song['duration'] / 1000, 60)
+            except:
+                minutes = 0
+                seconds = 0
 
-            return render_template('info.html', song=song, minutes=round(minutes), seconds=round(seconds))
+            return render_template('info.html', song=song, minutes=round(minutes), seconds=round(seconds),
+                                   enumerate=enumerate)
         return jsonify({'error': 'no id supplied'})
 
     @app.route('/download')
     @login_required
     def download():
         song_id = request.args.get('id')
+
         if 'id' in request.args:
             try:
                 song_data = Interfaces.song_database.find_song(song_id)
             except InvalidId:
                 return jsonify({'error': 'invalid id'})
 
-            path = SONGS_DIR + remove_forbidden_chars(song_data['title']) + ".mp3"
-            return send_file(path, as_attachment=True)
+            if 'song' in song_data['type']:
+                path = os.path.normpath(os.getcwd() + os.sep + os.pardir) + song_data['path']
+                return send_file(path, as_attachment=True)
+            elif 'set' in song_data['type']:
+                zipf = zipfile.ZipFile(song_data['title'] + '.zip', 'w', zipfile.ZIP_DEFLATED)
+                zipdir(os.path.normpath(os.getcwd() + os.sep + os.pardir) + '/songs/' + song_data['title'], zipf)
+                zipf.close()
+                return send_file(song_data['title'] + '.zip', as_attachment=True)
+
         return jsonify({'error': 'no id supplied'})
 
     @app.route('/delete')
     @login_required
     def delete():
+        # working on fix for sets
+
         song_id = request.args.get('id')
         song_data = Interfaces.song_database.find_song(song_id)
         if 'id' in request.args:
-            try:
+            if song_data['type'] == 'song':
                 # remove from db
                 Interfaces.song_database.delete({'_id': ObjectId(song_id)})
-
                 # remove from disk
-                path = SONGS_DIR + remove_forbidden_chars(song_data['title']) + ".mp3"
-                os.remove(path)
+                os.remove(os.path.normpath(os.getcwd() + os.sep + os.pardir) + song_data['path'])
 
-                flash('%s has been deleted.' % song_data['title'])
-            except:
-                flash('%s could not be deleted.' % song_data['title'])
+            elif song_data['type'] == 'set':
+                # remove from db
+                Interfaces.song_database.delete({'_id': ObjectId(song_id)})
+                # remove from disk
+                shutil.rmtree(os.path.normpath(os.getcwd() + os.sep + os.pardir) + '/songs/' + song_data['title'],
+                              ignore_errors=True)
+
+            flash('%s has been deleted.' % song_data['title'])
+
             return redirect(url_for('panel'))
-
         return jsonify({'error': 'no id supplied'})
 
     @app.route('/archive')

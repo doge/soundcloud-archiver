@@ -156,6 +156,7 @@ class SoundcloudDownloader:
         try:
             song = self.__get_song_mp3(self.data[0])
             file_name = "./songs/" + remove_forbidden_chars(self.data[0]['title']) + ".mp3"
+
             self.__write_file(file_name, song)
             self.__tag(file_name, self.data[0])
 
@@ -167,7 +168,7 @@ class SoundcloudDownloader:
     def download_set(self):
         ''' downloads, saves, and tags a set '''
 
-        path = "../songs/"
+        path = "./songs/"
 
         # create the songs directory if it doesn't already exist
         Path(path).mkdir(parents=True, exist_ok=True)
