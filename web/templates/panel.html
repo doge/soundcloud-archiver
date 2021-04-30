@@ -1,20 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" style="padding-left: .5rem;" href="/">soundcloud-archiver</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="/panel">Panel</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-black">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" style="padding-left:1rem;" href="/">soundcloud-archiver</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <div class="navbar-nav">
+            <a class="nav-link" href="/panel">Panel</a>
             <a class="nav-link" href="/archive">Download Archive</a>
             <a class="nav-link" href="/logout">Logout</a>
-          </div>
-        </div>
       </div>
-    </nav>
+
+      <div class="navbar-nav ms-auto" style="padding-right:1rem;">
+          <a class="nav-link">
+            <!-- dark mode switch !-->
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
+
+            <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input" id="darkSwitch" />
+              <label class="form-check-label" for="darkSwitch">Dark Mode</label>
+            </div>
+
+            <script src="{{ url_for('static', filename='/js/dark-mode-switch.min.js') }}" charset="utf-8"></script>
+          </a>
+      </div>
+    </div>
+  </div>
+
+</nav>
 
     <div style="padding-left:25px;padding-right:25px;padding-top:10px;">
 
@@ -45,7 +64,7 @@
             {% for song in recent_songs %}
                 <div class="col-3">
 
-                        <div class="card h-100 shadow-sm">
+                        <div class="card h-100 shadow-sm bg-grey">
                             <a href="/info?id={{ song['_id'] }}">
                             <img class="card-img-top" src="{{ song['artwork-url'] }}">
                             <div class="card-body">
@@ -90,11 +109,11 @@
             {% endif %}
         {% endwith %}
 
-    <div class="container-fluid shadow-lg" style="width:100%;">
+    <div class="container-fluid shadow-lg bg-grey" style="width:100%;border-radius:5px;">
         <div class="table-responsive">
           <table
                   data-toggle="table"
-                  class="table"
+                  class="table bg-grey"
                   data-search="true"
                   data-search-align="left"
                   data-pagination="true"
@@ -103,20 +122,20 @@
                   data-height="632">
               <thead>
                 <tr>
-                  <th data-sortable="true">Title</th>
-                  <th data-sortable="true">Artist</th>
-                  <th data-field="archive-date" data-sortable="true">Archive Date</th>
-                  <th>Actions</th>
+                  <th data-sortable="true" class="white-text">Title</th>
+                  <th data-sortable="true" class="white-text">Artist</th>
+                  <th data-field="archive-date" data-sortable="true" class="white-text">Archive Date</th>
+                  <th class="white-text">Actions</th>
                 </tr>
               </thead>
 
               <tbody>
               {% for song in songs %}
                 <tr>
-                  <td><a href="/info?id={{ song['_id'] }}">{{song['title']}}</a></td>
-                  <td><a href="{{ song['artist-url'] }}">{{ song['artist'] }}</a></td>
-                  <td>{{ song['archive-date'] }}</td>
-                  <td>
+                  <td class="white-text"><a href="/info?id={{ song['_id'] }}">{{song['title']}}</a></td>
+                  <td class="white-text"><a href="{{ song['artist-url'] }}">{{ song['artist'] }}</a></td>
+                  <td class="white-text">{{ song['archive-date'] }}</td>
+                  <td class="white-text">
                     <a href="/download?id={{ song['_id'] }}" class="btn btn-block btn-primary btn-success">
                       <span class="bi bi-file-earmark-arrow-down-fill"></span>
                     </a>
