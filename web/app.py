@@ -7,6 +7,7 @@ from bson.objectid import InvalidId
 from auth.middleware import login_required
 from auth.controllers import auth
 from bson.objectid import ObjectId
+import json
 
 SONGS_DIR = os.path.normpath(os.getcwd() + os.sep + os.pardir) + "/songs/"
 
@@ -129,6 +130,31 @@ def create_app():
         zipdir(SONGS_DIR, zipf)
         zipf.close()
         return send_file('archive.zip', as_attachment=True)
+
+    @app.route('/database', methods=['GET', 'POST'])
+    def db():
+        if request.method == "POST":
+            if 'text' in request.form:
+                try:
+                    Interfaces.song_database.update_document(request.form['text'])
+                    flash("Successsfully saved database.")
+                except:
+                    flash("Couldn't save database.")
+            else:
+                flash("No document provided.")
+
+
+
+        db_data = Interfaces.song_database.find()
+        parsed_data = []
+        for item in db_data:
+            item['_id'] = str(item['_id'])
+            if item['type'] == 'set':
+                for song in item['songs']:
+                    song['_id'] = str(song['_id'])
+            parsed_data.append(item)
+        dumped = json.dumps(parsed_data, indent=4)
+        return render_template('db.html', db_data=dumped)
 
     return app
 

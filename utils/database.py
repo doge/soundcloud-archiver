@@ -3,6 +3,7 @@ from config import Config
 import datetime
 from bson.objectid import ObjectId
 import re
+import json
 
 def remove_forbidden_chars(string):
     return re.sub(r'[\\/*?:"<>|]', "", string)
@@ -145,3 +146,19 @@ class Database:
             'type': 'set',
             'songs': formatted_songs
         })
+
+    def update_document(self, data):
+        # delete the current collection
+        self.collection.drop()
+
+        data = json.loads(data)
+        to_insert = []
+        for item in data:
+            item['_id'] = ObjectId(item['_id'])
+            if item['type'] == "set":
+                for song in item['songs']:
+                    song['_id'] = ObjectId(song['_id'])
+            to_insert.append(item)
+
+        col = self.db['songs']
+        col.insert(to_insert)

@@ -14,6 +14,71 @@
 
 </head>
 
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-black">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" style="padding-left:1rem;" href="/">soundcloud-archiver</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <div class="navbar-nav">
+            <a class="nav-link" href="/panel">Panel</a>
+            <a class="nav-link" href="/database">Database</a>
+            <a class="nav-link" href="/archive">Download Archive</a>
+      </div>
+
+      <div class="navbar-nav ms-auto" style="padding-right:1rem;">
+          <a class="nav-link" href="/logout">Logout</a>
+
+          <a class="nav-link">
+            <!-- dark mode switch !-->
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
+
+            <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input" id="darkSwitch" />
+              <label class="form-check-label" for="darkSwitch">Dark Mode</label>
+            </div>
+
+            <script src="{{ url_for('static', filename='/js/dark-mode-switch.min.js') }}" charset="utf-8"></script>
+          </a>
+      </div>
+    </div>
+  </div>
+
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            <div role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true"
+                 class="toast"
+                 data-autohide="true"
+                 data-delay="5000"
+                 style="position: absolute; top: 10; right: 10;z-index:2;">
+              <div class="toast-header">
+                <strong class="mr-auto">Alert</strong>
+              </div>
+              <div class="toast-body">
+                  {{ message }}
+              </div>
+            </div>
+
+            <script>
+                $('.toast').toast('show');
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <content>
     {% block content %} {% endblock %}
 </content>

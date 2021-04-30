@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<!-- Create a simple CodeMirror instance -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.js" integrity="sha512-LwxFyHyqmDdcint8dhTSHeJuI+uH5r/vrcGkxH4QhHGP8SpNaS9MVa1BxZRNTb1GPyLBAWrjbWpZTPGgtDgJOw==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/mode/javascript/javascript.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
+
+
+<style>
+    .CodeMirror {
+        border-radius: 5px;
+    }
+
+    .container-sm {
+        padding: 2rem;
+        border-radius:5px;
+        margin-top:1rem;
+
+    }
+</style>
+<div class="container-sm shadow">
+    <form method="post" action="/database">
+        <textarea id="codeeditor" name="text" style="border-radius: 20px;">
+        {{ db_data }}
+        </textarea>
+        <a href="/download?id=">
+            <button style="width:100%;margin-top:1rem;" class="btn btn-primary align-center btn-block shadow">
+                Save DB
+            </button>
+        </a>
+    </form>
+
+</div>
+
+<script>
+  var editor = CodeMirror.fromTextArea(document.getElementById('codeeditor'), {
+    lineNumbers: true,
+    mode: 'application/json',
+    htmlMode: true
+  });
+  editor.setSize(null, 550);
+
+</script>
+
+
+{% endblock %}
