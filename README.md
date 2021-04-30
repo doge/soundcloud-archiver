@@ -14,4 +14,4 @@ have a backup of the music you love, forever.
 
 ## screenshots
 ![panel](https://i.imgur.com/IAe0aFA.png)
-![info view](https://i.imgur.com/kXIQNyL.png)
+![info view](https://i.imgur.com/MoAPJPr.png)
