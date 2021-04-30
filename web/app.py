@@ -132,6 +132,7 @@ def create_app():
         return send_file('archive.zip', as_attachment=True)
 
     @app.route('/database', methods=['GET', 'POST'])
+    @login_required
     def db():
         if request.method == "POST":
             if 'text' in request.form:
