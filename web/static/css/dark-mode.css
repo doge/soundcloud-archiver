@@ -33,4 +33,13 @@
 
 [data-theme="dark"] .container-sm {
   background-color: #3b3b3b3b !important;
+  border-top: 1px solid #eee;
+}
+
+.container-sm, .container-border, .card {
+    border: 1px solid #4b4b4b4b;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #222222;
 }

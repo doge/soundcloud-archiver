@@ -64,7 +64,7 @@
             {% for song in recent_songs %}
                 <div class="col-3">
 
-                        <div class="card h-100 shadow-sm bg-grey">
+                        <div class="card h-100 shadow-sm bg-grey container-border">
                             <a href="/info?id={{ song['_id'] }}">
                             <img class="card-img-top" src="{{ song['artwork-url'] }}">
                             <div class="card-body">
@@ -109,7 +109,7 @@
             {% endif %}
         {% endwith %}
 
-    <div class="container-fluid shadow-lg bg-grey" style="width:100%;border-radius:5px;">
+    <div class="container-fluid container-border shadow-lg bg-grey" style="width:100%;border-radius:5px;">
         <div class="table-responsive">
           <table
                   data-toggle="table"
