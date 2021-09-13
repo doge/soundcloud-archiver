@@ -1,16 +1,15 @@
 # soundcloud-archiver
 have a backup of the music you love, forever.
 
-## todo
-- [x] daemon process
-   - [x] soundcloud downloader
-   - [x] discord webhook integration
-   - [x] store data in mongodb
- 
-- [x] web panel (flask)
-   - [x] setup
-   - [x] login system
-   - [x] dashboard
+## running
+first install the requirements in `requirements.txt`.
+
+then install your mongodb instance and configure `config.py` to match the credentials.
+
+start the daemon process located in `daemon/daemon.py`.
+
+start the web server located in `web/app.py`.
+
 
 ## screenshots
 ![panel](https://i.imgur.com/IAe0aFA.png)
